@@ -1,6 +1,7 @@
 import pygame
 from rectshape import RectShape
 from constants import *
+import sys
 
 class MainMenu(RectShape):
     def __init__(self, x1, y1, x2, y2):
@@ -25,6 +26,10 @@ class MainMenu(RectShape):
         text_rect = text_surface.get_rect()
         text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 25)
         screen.blit(text_surface, text_rect)
+        text_surface = instruction_font.render("or ESC to exit", True, "black")
+        text_rect = text_surface.get_rect()
+        text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
+        screen.blit(text_surface, text_rect)
 
     def update(self, dt):
         keys = pygame.key.get_pressed()
@@ -32,3 +37,5 @@ class MainMenu(RectShape):
         # Transition to the actual game when the user presses the enter key
         if keys[pygame.K_RETURN]:
             self.kill()
+        if keys[pygame.K_ESCAPE]:
+            sys.exit()

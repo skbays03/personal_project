@@ -3,10 +3,16 @@ from constants import *
 from mainmenu import MainMenu
 from pausemenu import PauseMenu
 
+
+
 def main():
-    print(f"Starting Pong with pygame version: {pygame.version.ver}\nScreen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")
+
+    screen_width = SCREEN_WIDTH
+    screen_height = SCREEN_HEIGHT
+
+    print(f"Starting Pong with pygame version: {pygame.version.ver}\nScreen width: {screen_width}\nScreen height: {screen_height}")
     pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
     pygame.display.set_caption("Pong")
     clock = pygame.time.Clock()
     running = True
@@ -22,10 +28,10 @@ def main():
 
     # 3. Instantiate Objects
     main_menu = MainMenu(
-        SCREEN_WIDTH//4,
-        SCREEN_HEIGHT//4,
-        SCREEN_WIDTH//2,
-        SCREEN_HEIGHT//2
+        screen_width//4,
+        screen_height//4,
+        screen_width//2,
+        screen_height//2
     )
 
     
@@ -35,15 +41,19 @@ def main():
         key = pygame.key.get_pressed()
         if key[pygame.K_ESCAPE]:
             pause_menu = PauseMenu(
-                SCREEN_WIDTH//4,
-                SCREEN_HEIGHT//4,
-                SCREEN_WIDTH//2,
-                SCREEN_HEIGHT//2
+                screen_width//4,
+                screen_height//4,
+                screen_width//2,
+                screen_height//2
             )
             pause_menu.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.VIDEORESIZE:
+                screen_width, screen_height = event.w, event.h
+                screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
+                print(f"Screen resized to: {screen_width}x{screen_height}")
 
         # Clear screen on each frame
         screen.fill("white")
