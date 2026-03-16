@@ -1,6 +1,7 @@
 import pygame
 from constants import *
 from mainmenu import MainMenu
+from pausemenu import PauseMenu
 
 def main():
     print(f"Starting Pong with pygame version: {pygame.version.ver}\nScreen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")
@@ -17,6 +18,7 @@ def main():
 
     # 2. Assign Containers Before Instantiation
     MainMenu.containers = (updtable, drawable)
+    PauseMenu.containers = (updtable, drawable)
 
     # 3. Instantiate Objects
     main_menu = MainMenu(
@@ -29,6 +31,16 @@ def main():
     
 
     while running:
+        # Check for pause menu trigger
+        key = pygame.key.get_pressed()
+        if key[pygame.K_ESCAPE]:
+            pause_menu = PauseMenu(
+                SCREEN_WIDTH//4,
+                SCREEN_HEIGHT//4,
+                SCREEN_WIDTH//2,
+                SCREEN_HEIGHT//2
+            )
+            pause_menu.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False

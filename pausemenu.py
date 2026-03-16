@@ -2,7 +2,7 @@ import pygame
 from rectshape import RectShape
 from constants import *
 
-class MainMenu(RectShape):
+class PauseMenu(RectShape):
     def __init__(self, x1, y1, x2, y2):
         super().__init__(x1, y1, x2, y2)
 
@@ -15,7 +15,7 @@ class MainMenu(RectShape):
         instruction_font = pygame.font.SysFont(None, 30)
         
         # Render and position the welcome text
-        text_surface = welcome_font.render("Welcome to Pong!", True, "black")
+        text_surface = welcome_font.render("Game Paused...", True, "black")
         text_rect = text_surface.get_rect()
         text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 25)
         screen.blit(text_surface, text_rect)
