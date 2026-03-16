@@ -2,6 +2,7 @@ import pygame
 from constants import *
 from mainmenu import MainMenu
 from pausemenu import PauseMenu
+from rectshape import RectShape
 
 
 
@@ -37,23 +38,40 @@ def main():
     
 
     while running:
-        # Check for pause menu trigger
+
         key = pygame.key.get_pressed()
+
+        # Check if Escape is pressed AND a PauseMenu doesn't already exist
         if key[pygame.K_ESCAPE]:
-            pause_menu = PauseMenu(
-                screen_width//4,
-                screen_height//4,
-                screen_width//2,
-                screen_height//2
-            )
-            pause_menu.draw(screen)
+
+            # Only create a new one if the 'updtable' group doesn't have a PauseMenu
+            is_paused = any(isinstance(s, PauseMenu) for s in updtable)
+            if not is_paused:
+                pause_menu = PauseMenu(
+                    screen_width // 4,
+                    screen_height // 4,
+                    screen_width // 2,
+                    screen_height // 2
+                )
+                pause_menu.draw(screen)
+
+        # Handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            # In main.py event loop
             if event.type == pygame.VIDEORESIZE:
                 screen_width, screen_height = event.w, event.h
                 screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
-                print(f"Screen resized to: {screen_width}x{screen_height}")
+                
+                # Loop through all sprites and update their coordinates if they have a resize method
+                for sprite in updtable:
+                    if isinstance(sprite, RectShape):
+                        sprite.x1 = screen_width // 4
+                        sprite.y1 = screen_height // 4
+                        sprite.x2 = screen_width // 2
+                        sprite.y2 = screen_height // 2
+                        sprite.points = [sprite.x1, sprite.y1, sprite.x2, sprite.y2]
 
         # Clear screen on each frame
         screen.fill("white")

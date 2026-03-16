@@ -7,28 +7,34 @@ class MainMenu(RectShape):
     def __init__(self, x1, y1, x2, y2):
         super().__init__(x1, y1, x2, y2)
 
+    # mainmenu.py
+
     def draw(self, screen):
-        # Draw border of the menu
+        # Get the actual current dimensions of the window
+        current_w = screen.get_width()
+        current_h = screen.get_height()
+
+        # Draw border using the dynamic points
         pygame.draw.rect(screen, "black", self.points, LINE_WIDTH*2)
 
-        # Set font types and sizes
         welcome_font = pygame.font.SysFont(None, 50)
         instruction_font = pygame.font.SysFont(None, 30)
         
-        # Render and position the welcome text
+        # Render and position the welcome text using current dimensions
         text_surface = welcome_font.render("Welcome to Pong!", True, "black")
         text_rect = text_surface.get_rect()
-        text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 25)
+        text_rect.center = (current_w // 2, current_h // 2 - 25) # Replaced SCREEN_WIDTH/HEIGHT
         screen.blit(text_surface, text_rect)
 
-        # Render and position the instruction text
+        # Render and position instructions using current dimensions
         text_surface = instruction_font.render("Press enter to continue", True, "black")
         text_rect = text_surface.get_rect()
-        text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 25)
+        text_rect.center = (current_w // 2, current_h // 2 + 25)
         screen.blit(text_surface, text_rect)
+
         text_surface = instruction_font.render("or ESC to exit", True, "black")
         text_rect = text_surface.get_rect()
-        text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
+        text_rect.center = (current_w // 2, current_h // 2 + 50)
         screen.blit(text_surface, text_rect)
 
     def update(self, dt):
