@@ -28,6 +28,7 @@ def main():
     MainMenu.containers = (updtable, drawable)
     PauseMenu.containers = (updtable, drawable)
     TopLine.containers = (updtable, drawable)
+    BottomLine.containers = (updtable, drawable)
 
     # 3. Instantiate Objects
     main_menu = MainMenu(
@@ -36,6 +37,8 @@ def main():
         screen_width//2,
         screen_height//2
     )
+    top_line = TopLine(0, 0, screen_width, 0)
+    bottom_line = BottomLine(0, screen_height, screen_width, screen_height)
 
     
 
@@ -48,15 +51,18 @@ def main():
         # Check if Escape is pressed AND a PauseMenu doesn't already exist
         if key[pygame.K_ESCAPE]:
 
-            # Only create a new one if the 'updtable' group doesn't have a PauseMenu
-            if not is_paused:
-                pause_menu = PauseMenu(
-                    screen_width // 4,
-                    screen_height // 4,
-                    screen_width // 2,
-                    screen_height // 2
-                )
-                pause_menu.draw(screen)
+            # Handle key inputs as a single-press event
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    # Only spawn a pause menu if one doesn't already exist
+                    if not any(isinstance(s, PauseMenu) for s in updtable):
+                        pause_menu =PauseMenu(
+                            screen_width//4,
+                            screen_height//4,
+                            screen_width//2,
+                            screen_height//2
+                        )
+                        pause_menu.draw(screen)
 
         # Handle events
         for event in pygame.event.get():
@@ -73,6 +79,10 @@ def main():
                 for sprite in updtable:
                     if isinstance(sprite, MainMenu) or isinstance(sprite, PauseMenu):
                         sprite.resize(screen_width // 4, screen_height // 4, screen_width // 2, screen_height // 2)
+                    if isinstance(sprite, TopLine):
+                        sprite.resize(0, 0, screen_width, 0)
+                    if isinstance(sprite, BottomLine):
+                        sprite.resize(0, screen_height, screen_width, screen_height)
 
         # Clear screen on each frame
         screen.fill("white")
@@ -80,12 +90,14 @@ def main():
         # Update all sprites
         updtable.update(dt)
 
-        # Draw all sprites
-        for sprite in drawable:
-            if sprite is not isinstance(sprite, MainMenu):
-                top_line = TopLine(0, screen_height, screen_width, screen_height)
-                top_line.draw(screen)
-            sprite.draw(screen)  
+        # Draw main menu first
+        if any(isinstance(s, MainMenu) for s in updtable):
+            main_menu.draw(screen)
+
+        # Only draw when main menu or pause menu is not present to avoid overlap
+        if not any(isinstance(s, MainMenu) for s in updtable) and not any(isinstance(s, PauseMenu) for s in updtable): 
+            top_line.draw(screen)
+            bottom_line.draw(screen)
 
         pygame.display.flip()
 
