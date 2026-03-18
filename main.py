@@ -1,8 +1,7 @@
 import pygame
 from constants import *
-from mainmenu import MainMenu
-from pausemenu import PauseMenu
-from rectshape import RectShape
+from menus import *
+from rectshape import *
 from boundingbox import *
 from playerpaddle import *
 
@@ -111,10 +110,7 @@ def main():
         if any(isinstance(s, PauseMenu) for s in updtable):
             pause_menu.draw(screen)
 
-        for player in players:
-            for line in top_bottom_lines:
-                if player.collides_with(line):
-                    print("Collision detected between player and line!")
+        #add future paddle/ball and paddle/wall collision checks here
 
         # Only draw when main menu or pause menu is not present to avoid overlap
         if not any(isinstance(s, MainMenu) for s in updtable) and not any(isinstance(s, PauseMenu) for s in updtable): 

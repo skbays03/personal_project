@@ -23,6 +23,19 @@ class PlayerPaddle(LineShape):
         if keys[pygame.K_DOWN]:
             self.move(dt)
 
+        min_y = 0 + LINE_WIDTH
+        max_y = SCREEN_HEIGHT - LINE_WIDTH
+        
+        # Clamp the top of the paddle
+        if self.y1 < min_y:
+            self.y1 = min_y
+            self.y2 = self.y1 + PADDLE_HEIGHT
+            
+        # Clamp the bottom of the paddle
+        if self.y2 > max_y:
+            self.y2 = max_y
+            self.y1 = self.y2 - PADDLE_HEIGHT
+
     def resize(self, x1, y1, x2, y2):
         self.x1, self.y1 = x1, y1
         self.x2, self.y2 = x2, y2
