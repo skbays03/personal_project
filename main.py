@@ -4,6 +4,7 @@ from mainmenu import MainMenu
 from pausemenu import PauseMenu
 from rectshape import RectShape
 from boundingbox import *
+from playerpaddle import *
 
 
 
@@ -27,22 +28,29 @@ def main():
     # 2. Assign Containers Before Instantiation
     MainMenu.containers = (updtable, drawable)
     PauseMenu.containers = (updtable, drawable)
-    TopLine.containers = (updtable, drawable)
-    BottomLine.containers = (updtable, drawable)
+    top_bottom_lines = pygame.sprite.Group()
+    TopLine.containers = (top_bottom_lines, updtable, drawable)
+    BottomLine.containers = (top_bottom_lines, updtable, drawable)
     LeftLine.containers = (updtable, drawable)
     RightLine.containers = (updtable, drawable)
+    players = pygame.sprite.Group()
+    PlayerPaddle.containers = (players, updtable, drawable)
 
     # 3. Instantiate Objects
+
+    margin = LINE_WIDTH
+
     main_menu = MainMenu(
         screen_width//4,
         screen_height//4,
         screen_width//2,
         screen_height//2
     )
-    top_line = TopLine(0, 0, screen_width, 0)
-    bottom_line = BottomLine(0, screen_height, screen_width, screen_height)
-    left_line = LeftLine(0, 0, 0, screen_height)
-    right_line = RightLine(screen_width, 0, screen_width, screen_height)
+    top_line = TopLine(0, margin, screen_width, margin)
+    bottom_line = BottomLine(0, screen_height - margin, screen_width, screen_height - margin)
+    left_line = LeftLine(margin, 0, margin, screen_height)
+    right_line = RightLine(screen_width - margin, 0, screen_width - margin, screen_height)
+    player = PlayerPaddle(25, screen_height//2 - PADDLE_HEIGHT//2, 25, screen_height//2 + PADDLE_HEIGHT//2)
 
     
 
@@ -75,6 +83,8 @@ def main():
                         sprite.resize(0, 0, 0, screen_height)
                     if isinstance(sprite, RightLine):
                         sprite.resize(screen_width, 0, screen_width, screen_height)
+                    if isinstance(sprite, PlayerPaddle):
+                        sprite.resize(25, screen_height//2 - PADDLE_HEIGHT//2, 25, screen_height//2 + PADDLE_HEIGHT//2)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -101,12 +111,18 @@ def main():
         if any(isinstance(s, PauseMenu) for s in updtable):
             pause_menu.draw(screen)
 
+        for player in players:
+            for line in top_bottom_lines:
+                if player.collides_with(line):
+                    print("Collision detected between player and line!")
+
         # Only draw when main menu or pause menu is not present to avoid overlap
         if not any(isinstance(s, MainMenu) for s in updtable) and not any(isinstance(s, PauseMenu) for s in updtable): 
             top_line.draw(screen)
             bottom_line.draw(screen)
             left_line.draw(screen)
             right_line.draw(screen)
+            player.draw(screen)
 
         pygame.display.flip()
 
