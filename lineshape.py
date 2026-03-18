@@ -1,7 +1,7 @@
 import pygame
 from constants import *
 
-class RectShape(pygame.sprite.Sprite):
+class LineShape(pygame.sprite.Sprite):
     def __init__(self, x1, y1, x2, y2):
         if hasattr(self, "containers"):
             super().__init__(self.containers)
