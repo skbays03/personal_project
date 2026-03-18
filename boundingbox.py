@@ -14,12 +14,7 @@ class TopLine(LineShape):
     def update(self, dt):
         pass
 
-    def resize(self, x1, y1, x2, y2):
-        self.x1, self.y1 = x1, y1
-        self.x2, self.y2 = x2, y2
-        self.points = [x1, y1, x2, y2]
-        # Update the internal rect for collisions
-        self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
+
 
 class BottomLine(LineShape):
     def __init__(self, x1, y1, x2, y2):
@@ -33,12 +28,7 @@ class BottomLine(LineShape):
     def update(self, dt):
         pass
 
-    def resize(self, x1, y1, x2, y2):
-        self.x1, self.y1 = x1, y1
-        self.x2, self.y2 = x2, y2
-        self.points = [x1, y1, x2, y2]
-        # Update the internal rect for collisions
-        self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
+
 
 class LeftLine(LineShape):
     def __init__(self, x1, y1, x2, y2):
@@ -52,12 +42,7 @@ class LeftLine(LineShape):
     def update(self, dt):
         pass
 
-    def resize(self, x1, y1, x2, y2):
-        self.x1, self.y1 = x1, y1
-        self.x2, self.y2 = x2, y2
-        self.points = [x1, y1, x2, y2]
-        # Update the internal rect for collisions
-        self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
+
 
 class RightLine(LineShape):
     def __init__(self, x1, y1, x2, y2):
@@ -70,10 +55,3 @@ class RightLine(LineShape):
 
     def update(self, dt):
         pass
-
-    def resize(self, x1, y1, x2, y2):
-        self.x1, self.y1 = x1, y1
-        self.x2, self.y2 = x2, y2
-        self.points = [x1, y1, x2, y2]
-        # Update the internal rect for collisions
-        self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
