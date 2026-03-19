@@ -127,9 +127,12 @@ def main():
 
         pygame.display.flip()
 
-        # dt is now in seconds (e.g., 0.016 for 60 FPS)
-        dt = clock.tick(60) / 1000
-        #print(player.center)
+        # Logic to freeze the game when the main menu or pause menu is active
+        if not any(isinstance(s, MainMenu) for s in updtable) and not any(isinstance(s, PauseMenu) for s in updtable):
+            dt = clock.tick(FRAME_RATE) / 1000
+            print(dt)
+        else:
+            dt = 0
 
     pygame.quit()
 

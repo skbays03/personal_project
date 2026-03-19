@@ -1,4 +1,5 @@
 # Constants for the Pong game
+FRAME_RATE = 240
 SCREEN_WIDTH = 2000
 SCREEN_HEIGHT = 1000
 LINE_WIDTH = 3
