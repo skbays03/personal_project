@@ -17,7 +17,7 @@ class TopLine(LineShape):
     def resize(self, x1, y1, x2, y2):
         self.x1, self.y1 = x1, y1
         self.x2, self.y2 = x2, y2
-        self.rect = pygame.Rect(min(self.x1, self.x2), min(self.y1, self.y2), abs(self.x2-self.x1), abs(self.y2-self.y1))
+        self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
 
 
 
@@ -36,7 +36,7 @@ class BottomLine(LineShape):
     def resize(self, x1, y1, x2, y2):
         self.x1, self.y1 = x1, y1
         self.x2, self.y2 = x2, y2
-        self.rect = pygame.Rect(min(self.x1, self.x2), min(self.y1, self.y2), abs(self.x2-self.x1), abs(self.y2-self.y1))
+        self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
 
 
 
@@ -55,7 +55,7 @@ class LeftLine(LineShape):
     def resize(self, x1, y1, x2, y2):
         self.x1, self.y1 = x1, y1
         self.x2, self.y2 = x2, y2
-        self.rect = pygame.Rect(min(self.x1, self.x2), min(self.y1, self.y2), abs(self.x2-self.x1), abs(self.y2-self.y1))
+        self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
 
 
 
@@ -74,4 +74,4 @@ class RightLine(LineShape):
     def resize(self, x1, y1, x2, y2):
         self.x1, self.y1 = x1, y1
         self.x2, self.y2 = x2, y2
-        self.rect = pygame.Rect(min(self.x1, self.x2), min(self.y1, self.y2), abs(self.x2-self.x1), abs(self.y2-self.y1))
+        self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
