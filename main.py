@@ -3,7 +3,7 @@ from constants import *
 from menus import *
 from rectshape import *
 from boundingbox import *
-from playerpaddle import *
+from paddles import *
 
 
 
@@ -34,6 +34,7 @@ def main():
     RightLine.containers = (updtable, drawable)
     players = pygame.sprite.Group()
     PlayerPaddle.containers = (players, updtable, drawable)
+    AIPaddle.containers = (players, updtable, drawable)
 
     # 3. Instantiate Objects
 
@@ -50,6 +51,7 @@ def main():
     left_line = LeftLine(margin, 0, margin, screen_height)
     right_line = RightLine(screen_width - margin, 0, screen_width - margin, screen_height)
     player = PlayerPaddle(25, screen_height//2 - PADDLE_HEIGHT//2, 25, screen_height//2 + PADDLE_HEIGHT//2)
+    ai = AIPaddle(screen_width - 25, screen_height//2 - PADDLE_HEIGHT//2, screen_width - 25, screen_height//2 + PADDLE_HEIGHT//2)
 
     
 
@@ -84,6 +86,8 @@ def main():
                         sprite.resize(screen_width, 0, screen_width, screen_height)
                     if isinstance(sprite, PlayerPaddle):
                         sprite.resize(25, screen_height//2 - PADDLE_HEIGHT//2, 25, screen_height//2 + PADDLE_HEIGHT//2)
+                    if isinstance(sprite, AIPaddle):
+                        sprite.resize(screen_width - 25, screen_height//2 - PADDLE_HEIGHT//2, screen_width - 25, screen_height//2 + PADDLE_HEIGHT//2)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -119,6 +123,7 @@ def main():
             left_line.draw(screen)
             right_line.draw(screen)
             player.draw(screen)
+            ai.draw(screen)
 
         pygame.display.flip()
 
