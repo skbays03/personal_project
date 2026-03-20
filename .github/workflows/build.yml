@@ -23,9 +23,7 @@ jobs:
         pip install pygame pyinstaller
 
     - name: Build with PyInstaller
-      shell: bash
       run: |
-        cd \\wsl.localhost\Ubuntu\home\shawn\workspace\Shawn\Pong
         pyinstaller --onefile --noconsole --collect-submodules paddles --collect-submodules ball main.py
 
     - name: Upload Executable
