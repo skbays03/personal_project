@@ -38,5 +38,3 @@ class CircleShape(pygame.sprite.Sprite):
         elif isinstance(other, LeftLine) or isinstance(other, RightLine):
             return abs(self.position.x - other.x1) < self.radius
         return False
-            
-        

@@ -191,7 +191,7 @@ def main():
                     Ball(screen_width//2, screen_height//2, BALL_RADIUS)
                     ball.draw(screen)
 
-        if player.score >= 11:
+        if player.score >= 2:
             win_menu = WinConditionMenu(
                 screen_width//4,
                 screen_height//4,
