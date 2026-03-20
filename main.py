@@ -199,7 +199,7 @@ def main():
                 screen_height//2,
                 "Player"
             )
-        elif ai.score >= 11:
+        elif ai.score >= 1:
             win_menu = WinConditionMenu(
                 screen_width//4,
                 screen_height//4,
@@ -224,12 +224,17 @@ def main():
         pygame.display.flip()
 
         if any(isinstance(s, WinConditionMenu) for s in updtable):
-            player.score = 0
-            ai.score = 0
             keys = pygame.key.get_pressed()
             if keys[pygame.K_RETURN]:
-                win_menu.kill()
-                main()
+                # Reset game state locally
+                player.score = 0
+                ai.score = 0
+                # Kill the win menu to resume
+                for s in updtable:
+                    if isinstance(s, WinConditionMenu):
+                        s.kill()
+                # Reset ball position
+                ball.position = pygame.Vector2(screen_width // 2, screen_height // 2)
 
         if not menu_active:
             dt = clock.tick(FRAME_RATE) / 1000
