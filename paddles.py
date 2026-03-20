@@ -57,6 +57,11 @@ class AIPaddle(LineShape):
         super().__init__(x1, y1, x2, y2)
         self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
         self.center = self.rect.center
+
+    def move(self, dt):
+        self.y1 += dt * 500
+        self.y2 += dt * 500
+        self.rect.y = min(self.y1, self.y2)
     
     def draw(self, screen):
         

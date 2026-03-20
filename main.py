@@ -4,6 +4,7 @@ from menus import *
 from rectshape import *
 from boundingbox import *
 from paddles import *
+from ball import *
 
 
 
@@ -35,6 +36,9 @@ def main():
     players = pygame.sprite.Group()
     PlayerPaddle.containers = (players, updtable, drawable)
     AIPaddle.containers = (players, updtable, drawable)
+    balls = pygame.sprite.Group()
+    Ball.containers = (balls, updtable, drawable)
+
 
     # 3. Instantiate Objects
 
@@ -52,6 +56,7 @@ def main():
     right_line = RightLine(screen_width - margin, 0, screen_width - margin, screen_height)
     player = PlayerPaddle(25, screen_height//2 - PADDLE_HEIGHT//2, 25, screen_height//2 + PADDLE_HEIGHT//2)
     ai = AIPaddle(screen_width - 25, screen_height//2 - PADDLE_HEIGHT//2, screen_width - 25, screen_height//2 + PADDLE_HEIGHT//2)
+    ball = Ball(screen_width//2, screen_height//2, BALL_RADIUS)
 
     
 
@@ -114,7 +119,34 @@ def main():
         if any(isinstance(s, PauseMenu) for s in updtable):
             pause_menu.draw(screen)
 
-        #add future paddle/ball and ball/wall collision checks here
+        if any(isinstance(s, Ball) for s in updtable):
+
+            # Simple AI to follow the ball
+            if ball.position.y < ai.center[1]:
+                ai.move(-dt)
+            elif ball.position.y > ai.center[1]:
+                ai.move(dt)
+
+        for ball in balls:
+            
+            if ball.collides_with(player):
+                ball.velocity.x *= -1
+                ball.velocity.y *= -1
+            if ball.collides_with(ai):
+                ball.velocity.x *= -1
+                ball.velocity.y *= -1
+            if ball.collides_with(top_line):
+                ball.velocity.x *= 1
+                ball.velocity.y *= -1
+            if ball.collides_with(bottom_line):
+                ball.velocity.x *= 1
+                ball.velocity.y *= -1
+            if ball.collides_with(left_line):
+                ball.velocity.x *= -1
+                ball.velocity.y *= 1
+            if ball.collides_with(right_line):
+                ball.velocity.x *= -1
+                ball.velocity.y *= 1
 
         # Only draw when main menu or pause menu is not present to avoid overlap
         if not any(isinstance(s, MainMenu) for s in updtable) and not any(isinstance(s, PauseMenu) for s in updtable): 
@@ -124,6 +156,7 @@ def main():
             right_line.draw(screen)
             player.draw(screen)
             ai.draw(screen)
+            ball.draw(screen)
 
         pygame.display.flip()
 
