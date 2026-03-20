@@ -28,6 +28,7 @@ def main():
     # 2. Assign Containers Before Instantiation
     MainMenu.containers = (updtable, drawable)
     PauseMenu.containers = (updtable, drawable)
+    WinConditionMenu.containers = (updtable, drawable)
     top_bottom_lines = pygame.sprite.Group()
     TopLine.containers = (top_bottom_lines, updtable, drawable)
     BottomLine.containers = (top_bottom_lines, updtable, drawable)
@@ -63,8 +64,6 @@ def main():
     while running:
 
         key = pygame.key.get_pressed()
-
-        is_paused = any(isinstance(s, PauseMenu) for s in updtable)
             
         # Handle events
         for event in pygame.event.get():
@@ -79,7 +78,7 @@ def main():
                 
                 # Loop through all sprites and update their coordinates if they have a resize method
                 for sprite in updtable:
-                    if isinstance(sprite, MainMenu) or isinstance(sprite, PauseMenu):
+                    if isinstance(sprite, MainMenu) or isinstance(sprite, PauseMenu) or isinstance(sprite, WinConditionMenu):
                         sprite.resize(screen_width // 4, screen_height // 4, screen_width // 2, screen_height // 2)
                     if isinstance(sprite, TopLine):
                         sprite.resize(0, 0, screen_width, 0)
@@ -97,8 +96,8 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     # Only spawn a pause menu if one doesn't already exist
-                    if not any(isinstance(s, PauseMenu) for s in updtable):
-                        pause_menu =PauseMenu(
+                    if not any(isinstance(s, PauseMenu) for s in updtable) and not any(isinstance(s, WinConditionMenu) for s in updtable):
+                        pause_menu = PauseMenu(
                             screen_width//4,
                             screen_height//4,
                             screen_width//2,
@@ -119,37 +118,66 @@ def main():
         if any(isinstance(s, PauseMenu) for s in updtable):
             pause_menu.draw(screen)
 
+        # Draw win condition menu if it exists
+        if any(isinstance(s, WinConditionMenu) for s in updtable):
+            win_menu.draw(screen)
+
         if any(isinstance(s, Ball) for s in updtable):
 
             # Simple AI to follow the ball
             if ball.position.y < ai.center[1]:
-                ai.move(-dt)
+                ai.move(-dt/2)
             elif ball.position.y > ai.center[1]:
-                ai.move(dt)
+                ai.move(dt/2)
 
         for ball in balls:
             
+            # Handle ball collisions with paddles and walls
             if ball.collides_with(player):
                 ball.velocity.x *= -1
-                ball.velocity.y *= -1
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_UP]:
+                    ball.velocity.y -= 100
+                if keys[pygame.K_DOWN]:
+                    ball.velocity.y += 100
             if ball.collides_with(ai):
                 ball.velocity.x *= -1
-                ball.velocity.y *= -1
             if ball.collides_with(top_line):
-                ball.velocity.x *= 1
                 ball.velocity.y *= -1
             if ball.collides_with(bottom_line):
-                ball.velocity.x *= 1
                 ball.velocity.y *= -1
             if ball.collides_with(left_line):
-                ball.velocity.x *= -1
-                ball.velocity.y *= 1
+                ball.kill()
+                ai.score += 1
+                print(f"AI Score: {ai.score}")
+                Ball(screen_width//2, screen_height//2, BALL_RADIUS)
+                ball.draw(screen)
             if ball.collides_with(right_line):
-                ball.velocity.x *= -1
-                ball.velocity.y *= 1
+                ball.kill()
+                player.score += 1
+                print(f"Player Score: {player.score}")
+                Ball(screen_width//2, screen_height//2, BALL_RADIUS)
+                ball.draw(screen)
+
+        if player.score >= 10:
+            win_menu = WinConditionMenu(
+                screen_width//4,
+                screen_height//4,
+                screen_width//2,
+                screen_height//2,
+                "Player"
+            )
+        elif ai.score >= 1:
+            win_menu = WinConditionMenu(
+                screen_width//4,
+                screen_height//4,
+                screen_width//2,
+                screen_height//2,
+                "AI"
+            )
 
         # Only draw when main menu or pause menu is not present to avoid overlap
-        if not any(isinstance(s, MainMenu) for s in updtable) and not any(isinstance(s, PauseMenu) for s in updtable): 
+        if not any(isinstance(s, MainMenu) for s in updtable) and not any(isinstance(s, PauseMenu) for s in updtable) and not any(isinstance(s, WinConditionMenu) for s in updtable): 
             top_line.draw(screen)
             bottom_line.draw(screen)
             left_line.draw(screen)
@@ -163,7 +191,7 @@ def main():
         # Logic to freeze the game when the main menu or pause menu is active
         if not any(isinstance(s, MainMenu) for s in updtable) and not any(isinstance(s, PauseMenu) for s in updtable):
             dt = clock.tick(FRAME_RATE) / 1000
-            print(dt)
+            #print(dt)
         else:
             dt = 0
 
