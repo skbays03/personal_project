@@ -1,6 +1,7 @@
 import pygame
 from constants import *
 from circleshape import *
+import random
 
 class Ball(CircleShape):
     def __init__(self, x, y, radius):

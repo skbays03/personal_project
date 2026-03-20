@@ -2,7 +2,6 @@ import pygame
 from constants import *
 from paddles import *
 from boundingbox import *
-import random
 
 class CircleShape(pygame.sprite.Sprite):
     def __init__(self, x, y, radius):
