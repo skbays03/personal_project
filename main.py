@@ -183,12 +183,15 @@ def main():
                 if ball.collides_with(left_line):
                     ball.kill()
                     ai.score += 1
-                    Ball(screen_width//2, screen_height//2, BALL_RADIUS)
+                    # Assign the new ball to the variable!
+                    ball = Ball(screen_width//2, screen_height//2, BALL_RADIUS) 
                     ball.draw(screen)
+                    
                 if ball.collides_with(right_line):
                     ball.kill()
                     player.score += 1
-                    Ball(screen_width//2, screen_height//2, BALL_RADIUS)
+                    # Assign the new ball to the variable!
+                    ball = Ball(screen_width//2, screen_height//2, BALL_RADIUS) 
                     ball.draw(screen)
 
         if player.score >= 2:
