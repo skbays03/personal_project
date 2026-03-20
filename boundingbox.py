@@ -75,3 +75,18 @@ class RightLine(LineShape):
         self.x1, self.y1 = x1, y1
         self.x2, self.y2 = x2, y2
         self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
+
+class DashedCenterLine(LineShape):
+    def __init__(self, x1, y1, x2, y2):
+        super().__init__(x1, y1, x2, y2)
+
+    def draw(self, screen):
+        for i in range(0, int(self.y2 - self.y1), 20):
+            pygame.draw.line(screen, "black", (self.x1, self.y1 + i), (self.x2, self.y1 + i + 10), LINE_WIDTH*4)
+
+    def update(self, dt):
+        pass
+
+    def resize(self, x1, y1, x2, y2):
+        self.x1, self.y1 = x1, y1
+        self.x2, self.y2 = x2, y2

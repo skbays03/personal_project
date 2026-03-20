@@ -8,6 +8,8 @@ class PlayerPaddle(LineShape):
         self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
         self.center = self.rect.center
         self.score = 0
+        self.current_screen_height = pygame.display.get_surface().get_height()
+        self.current_screen_width = pygame.display.get_surface().get_width()
     
     def move(self, dt):
         self.y1 += dt * 500
@@ -48,8 +50,14 @@ class PlayerPaddle(LineShape):
         self.points = [x1, y1, x2, y2]
         self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
         self.center = self.rect.center
-        #print(self.center)
-        #print(self.points)
+        self.current_screen_height = pygame.display.get_surface().get_height()
+        self.current_screen_width = pygame.display.get_surface().get_width()
+        self.score_board(pygame.display.get_surface())
+
+    def score_board(self, screen):
+        font = pygame.font.SysFont(None, 50)
+        score_surface = font.render(f"{self.score}", True, "black")
+        screen.blit(score_surface, (self.current_screen_width//2 - 150, 20))
 
 
 
@@ -59,6 +67,8 @@ class AIPaddle(LineShape):
         self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
         self.center = self.rect.center
         self.score = 0
+        self.current_screen_height = pygame.display.get_surface().get_height()
+        self.current_screen_width = pygame.display.get_surface().get_width()
 
     def move(self, dt):
         self.y1 += dt * 500
@@ -69,11 +79,22 @@ class AIPaddle(LineShape):
         
         pygame.draw.line(screen, "black", (self.x1, self.y1), (self.x2, self.y2), LINE_WIDTH*4)
 
-    def update(self, dt):
+    def update(self, dt, ball):
         
-        #movement logic for the AI paddle will go here, for now it just stays in the middle of the screen
+            # 1. Prediction Logic
+        if ball.velocity.x > 0:
+            # Move toward predicted path
+            target = ball.position.y
+        else:
+            # Idle at center
+            target = pygame.display.get_surface().get_height() // 2
+        
+        # 2. Movement with a "Dead Zone" to prevent shaking
+        if abs(self.center[1] - target) > 5:
+            direction = 1 if target > self.center[1] else -1
+            # AI moves at 25% of standard speed to be beatable
+            self.move(direction * dt * 0.25)
 
-        #Clamps the AI paddle to the confines of the screen
         current_screen_height = pygame.display.get_surface().get_height()
         min_y = 0 + LINE_WIDTH
         max_y = current_screen_height - LINE_WIDTH
@@ -96,5 +117,11 @@ class AIPaddle(LineShape):
         self.points = [x1, y1, x2, y2]
         self.rect = pygame.Rect(min(x1, x2), min(y1, y2), abs(x2-x1), abs(y2-y1))
         self.center = self.rect.center
-        #print(self.center)
-        #print(self.points)
+        self.current_screen_height = pygame.display.get_surface().get_height()
+        self.current_screen_width = pygame.display.get_surface().get_width()
+        self.score_board(pygame.display.get_surface())
+
+    def score_board(self, screen):
+        font = pygame.font.SysFont(None, 50)
+        score_surface = font.render(f"{self.score}", True, "black")
+        screen.blit(score_surface, (self.current_screen_width//2 + 150, 20))

@@ -1,6 +1,7 @@
 import pygame
 from rectshape import RectShape
 from constants import *
+from main import main
 import sys
 
 class MainMenu(RectShape):
@@ -109,6 +110,11 @@ class WinConditionMenu(RectShape):
         text_surface = instruction_font.render("Press esc to exit", True, "black")
         text_rect = text_surface.get_rect()
         text_rect.center = (win_rect.centerx, win_rect.centery + 30)
+        screen.blit(text_surface, text_rect)
+
+        text_surface = instruction_font.render("or enter to play again", True, "black")
+        text_rect = text_surface.get_rect()
+        text_rect.center = (win_rect.centerx, win_rect.centery + 60)
         screen.blit(text_surface, text_rect)
 
     def update(self, dt):
