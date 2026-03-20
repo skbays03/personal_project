@@ -202,7 +202,7 @@ def main():
                 screen_height//2,
                 "Player"
             )
-        elif ai.score >= 1:
+        elif ai.score >= 11:
             win_menu = WinConditionMenu(
                 screen_width//4,
                 screen_height//4,
