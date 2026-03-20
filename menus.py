@@ -1,7 +1,6 @@
 import pygame
 from rectshape import RectShape
 from constants import *
-from main import main
 import sys
 
 class MainMenu(RectShape):
